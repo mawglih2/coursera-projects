@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>practice mod3</title>
+</head>
+<body>
+	<h1>This text</h1>
+	<p>New paragraph</p>
+	<table>
+		<th>Name</th>
+	</table>
+
+	<script>
+		var pets = ["dog", "cats", "rabbit", "hamster", "rabbit", "rabbit", "dog", "hamster", "hamster","cat", "rabbit"];
+		var rabbitPositions = [], startSearchAt = 0;
+		do {
+			foundAt = pets.indexOf("rabbit", startSearchAt);
+			if(foundAt != -1){
+				console.log("rabbit position is at "+rabbitPositions)
+				rabbitPositions.push(foundAt);
+				startSearchAt = foundAt+1;
+			}
+
+		}while(foundAt != -1);
+		//alert(rabbitPositions);
+
+		var pets2 = ["dog", "cat","hamster","rabbit"];
+		var result = pets2.slice(1);
+		console.log("result= "+ result);
+
+		var pets3 = ["dog", "cats", "rabbit", "hamster", "rabbit", "rabbit", "dog", "hamster", "hamster","cat", "rabbit"];
+		var result2 = pets3.splice(1,1);
+		console.log("result2= "+ result2);
+		console.log("pets3= " +pets3);
+		var pets4 = ["dog", "cats", "rabbit", "hamster", "rabbit", "rabbit", "dog", "hamster", "hamster","cat", "rabbit"];
+		var result4 = pets4.splice(2,0,"wolf");
+		console.log("result4= " +result4);
+		console.log("pets4= "+pets4);
+		//pets4.forEach(console.log);
+		for(var i=0; i<pets4.length; i++){
+			console.log(pets4[i]);
+		}
+		function handlecLICK(event){
+			event.stopPropagation();
+			var node = event.target;
+			var thisPath = node.nodeName;
+
+			while (node.parentNode){
+				node = node.parentNode;
+				thisPath = node.nodeName + " > " + thisPath;
+			}
+			alert(thisPath);
+		}
+		function attachHandler(node) {
+			if (node == null)return;
+			node.onclick = handlecLICK;
+
+			for (var i = 0; i < node.childNodes.length; i++) {
+				attachHandler(node.childNodes[i]);
+			}
+		}
+	</script>	
+</body>
+</html>

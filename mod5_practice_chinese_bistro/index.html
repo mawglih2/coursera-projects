@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Le Gourmet Bistro</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Bungee+Shade|Roboto" rel="stylesheet">
+  </head>
+<body>
+  <header>
+    <nav id="header-nav" class="navbar navbar-default">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="index.html" class="pull-left visible-md visible-lg">
+            <div id="logo-img" alt="logo image"></div>
+          </a>
+          <div class="navbar-brand">
+            <a href="index.html"><h1>Le Gourmet Bistro</h1></a>
+            <p>
+              <img src="img/star-k-logo.png" alt="Kosher certification">
+              <span>Kosher Certified</span>
+            </p>
+          </div>
+
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsable-nav" aria-expanded="false">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div id="collapsable-nav" class="collapse navbar-collapse">
+          <ul id="nav-list" class="nav navbar-nav navbar-right">
+            <li>
+              <a href="#">
+                <span class="glyphicon glyphicon-btc"></span><br class="hidden-xs"> Main</a>
+            </li>
+            <li>
+              <a href="menu-categories.html">
+                <span class="glyphicon glyphicon-rub"></span><br class="hidden-xs"> Menu</a>
+            </li>
+            <li>
+              <a href="single-category.html">
+                <span class="glyphicon glyphicon-yen"></span><br class="hidden-xs"> Items</a>
+            </li>
+            <li id="phone" class="hidden-xs">
+              <a href="tel:888-888-0000"><span>888-888-0000</span></a>
+              <div class="text-center visible-xs">$$We do not deliver$$</div>
+            </li>
+          </ul>
+        </div><!--collapsable container-->
+      </div>
+    </nav>
+  </header>
+  <div id="call-btn" class="visible-xs">
+    <a class="btn" href="tel:888-888-0000">
+      <span class="glyphicon glyphicon-earphone"></span>888-888-0000
+    </a>
+  </div>
+
+<h1 class="text-center">Our Menu</h1>
+  <div id="main-content" class="container"></div> 
+
+  <footer class="panel-footer"><!--footer start-->
+    <div class="container">
+      <div class="row">
+        <section id="hours" class="col-sm-4 col-xs-12">
+          <span>Hours:</span><br>
+          Sunday Closed<br>
+          Mon-Fri Closed<br>
+          Saturday 2am - 6 am<br>
+          <hr class="visible-xs">
+        </section>
+        <section id="address" class="col-sm-4 col-xs-12">
+          <span>Address:</span><br>
+          15-25 Raymond street<br>
+          Fair Lawn, NJ 07410
+          <p>**Delivery is not provided because we are lazy**</p>
+          <hr class="visible-xs">
+        </section>
+        <section id="testimonials" class="col-sm-4 col-xs-12"|>
+          <p>"We are the best"</p>
+          <p>"nobody can beat our emptiness"</p>
+          <hr class="visible-xs">
+        </section>
+      </div> <!--end of row-->
+      <div class="text-center">&copy; Copyright Oleg Markoff 2016</div>
+    </div> <!--end of container-->
+  </footer><!--footer end -->
+
+  <!-- jQuery (Bootstrap JS plugins depend on it) -->
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <script src="js/script.js"></script>
+  <script src="js/ajax-utils.js"></script>
+  <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
+</body>
+</html>

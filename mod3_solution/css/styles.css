@@ -1,0 +1,202 @@
+*{
+
+}
+body{
+	font-family: 'Roboto', sans-serif;
+	background-color: #40A1C2;
+	font-size: 1.2em;
+	color: #FFF;
+}
+/*header*/
+#header-nav {
+	background-color: #C36241;
+	border-radius: 0;
+	border:0;
+}
+#logo-img{
+	background: url('../img/legourmet.jpg') no-repeat;
+	width: 150px;
+	height: 150px;
+	margin: 10px 15px 10px 0;
+}
+.navbar-brand{
+	padding-top: 25px;
+}
+.navbar-brand a:hover, .navbar-brand a:focus{
+	text-decoration: none;
+}
+.navbar-brand p {
+	color: #000;
+	text-transform: uppercase;
+	font-size: .5em;
+	margin-top: 15px;
+}
+.navbar-brand h1{
+	font-family: 'Bungee Shade', cursive;
+	color: #174DD4;
+	font-size: 3vw;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #FDF7FF;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: .75;
+}
+.navbar-brand p span{
+	vertical-align: middle;
+}
+.glyphicon, #nav-list div{
+	color: #174DD4;
+}
+#nav-list {
+	margin-top: 10px;
+}
+#nav-list a{
+	color: #fff;
+	text-align: center;
+	font-size: 1.2em;
+}
+#nav-list a:hover {
+	background: #40A1C2;
+}
+#nav-list a span {
+	font-size: 1.3em;
+}
+#phone {
+	margin-top: 5px;
+}
+#phone a {
+	text-align: right;
+	padding-bottom: 0;
+}
+#phone div {
+	text-align: right;
+	padding-right: 15px;
+	color: #000;
+	text-transform: uppercase;
+	text-shadow: 1px 1px 1px #174DD4;
+}
+.navbar-header button.navbar-toggle, .navbar-header .icon-bar{
+	border: 1px solid #40A1C2;
+}
+.navbar-header button.navbar-toggle {
+	clear: both;
+	margin-top: -15px;
+}
+/*end header*/
+/*media*/
+@media (min-width: 1200px ) {
+
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+	#logo-img {
+		background: url('../img/legourmet_med.jpg') no-repeat;
+		width:100px;
+		height: 100px;
+		margin-top: 5px 5px 5px 0;
+
+	}
+	#section1, #section2, #section3{
+    	display: inline-block;
+  	}
+  	#section1, #section2{
+  		width: 49.6%;
+  	}
+  	#section3{
+  		width: 100%
+  	}
+}
+@media (min-width: 768px) and (max-width: 991px ) {
+	
+}
+@media (min-width: 767px) {
+	.navbar-brand h1 {
+		padding-top: 2px;
+	}
+	.navbar-brand p {
+		text-transform: uppercase;
+		font-size: .5em;
+		margin-top: 2px;
+	}
+	.navbar-brand p img{
+		height: 20px;
+	}
+}
+#collapsable-nav  a{
+	font-size: 1.4em;
+}
+#collapsable-nav  a span{
+	font-size: 1em;
+	margin-right: 5px;
+}
+/*main body*/
+section{
+	padding: 12px;
+	display: inline-block;
+	width: 49.6%;
+}
+.title{
+	position: absolute;
+	top: 0;
+	right: 0;
+	border: 1px solid #FFF;
+	box-shadow: 1px 1px 1px #898989;
+	border-radius: 0px 0px 0px 5px;
+	font-size: 1.2em;
+}
+#section1 .content, #section2 .content, #section3 .content {
+	font-size: 3vh;
+	background-color: #898989;
+	position: relative;
+	border: 1px solid #FFF;
+	padding: 50px 10px 10px 10px;
+}
+section>div{
+	border: 2px solid #FFF;
+	border-radius: 5px;
+    text-align: right;
+    width: 30%
+    margin-left: 70%;
+    font-weight: bold;
+    font-size: 1.2em;
+    margin-bottom: 0;
+    margin-top: 0;
+    padding: 5px;
+}
+#chicken{
+    background-color: #CC6699;
+    padding: 5px 10px 0 10px;
+}
+#beef{
+	background-color: #FF3300;
+	color: #FFF;
+	padding: 5px 10px 0 10px;
+}
+#sushi{
+	background-color: #FFCC00;
+	padding: 5px 10px 0 10px;
+}
+.content p {
+	text-align: left;
+}
+#call-btn > a {
+    font-size: 1.5em;
+    display: block;
+    margin: 0 20px;
+    padding: 10px;
+    border: 2px solid #FFF;
+    background-color: #C36241;
+    color: #174DD4;
+    text-shadow: 1px 1px 1px #FFF;
+  }
+  #xs-deliver {
+    margin-top: 5px;
+    font-size: .7em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .glyphicon-earphone{
+  	padding-right: 5px;
+  }
+  .link_to_top{
+  	font-weight: bold;
+  }

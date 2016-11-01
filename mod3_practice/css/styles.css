@@ -1,0 +1,359 @@
+*{
+
+}
+body{
+	font-family: 'Roboto', sans-serif;
+	background-color: #40A1C2;
+	font-size: 1.2em;
+	color: #FFF;
+}
+/*header*/
+#header-nav {
+	background-color: #C36241;
+	border-radius: 0;
+	border:0;
+}
+#logo-img{
+	background: url('../img/legourmet.jpg') no-repeat;
+	width: 150px;
+	height: 150px;
+	margin: 10px 15px 10px 0;
+}
+.navbar-brand{
+	padding-top: 25px;
+}
+.navbar-brand a:hover, .navbar-brand a:focus{
+	text-decoration: none;
+}
+.navbar-brand p {
+	color: #000;
+	text-transform: uppercase;
+	font-size: .5em;
+	margin-top: 15px;
+}
+.navbar-brand h1{
+	font-family: 'Bungee Shade', cursive;
+	color: #174DD4;
+	font-size: 3vw;
+    text-transform: uppercase;
+    text-shadow: 1px 1px 1px #FDF7FF;
+    margin-top: 0;
+    margin-bottom: 0;
+    line-height: .75;
+}
+.navbar-brand p span{
+	vertical-align: middle;
+}
+.glyphicon, #nav-list div{
+	color: #174DD4;
+}
+#nav-list {
+	margin-top: 10px;
+}
+#nav-list a{
+	color: #fff;
+	text-align: center;
+	font-size: 1.2em;
+}
+#nav-list a:hover {
+	background: #40A1C2;
+}
+#nav-list a span {
+	font-size: 1.3em;
+}
+#phone {
+	margin-top: 5px;
+}
+#phone a {
+	text-align: right;
+	padding-bottom: 0;
+}
+#phone div {
+	text-align: right;
+	padding-right: 15px;
+	color: #000;
+	text-transform: uppercase;
+	text-shadow: 1px 1px 1px #174DD4;
+}
+.navbar-header button.navbar-toggle, .navbar-header .icon-bar{
+	border: 1px solid #40A1C2;
+}
+.navbar-header button.navbar-toggle {
+	clear: both;
+	margin-top: -15px;
+}
+#collapsable-nav  a{
+	font-size: 1.4em;
+}
+#collapsable-nav  a span{
+	font-size: 1em;
+	margin-right: 5px;
+}
+/*end header*/
+
+/*footer start*/
+.panel-footer{
+	margin-top: 30px;
+	padding-top: 35px;
+	padding-bottom: 30px;
+	background-color: #800000;
+	border-top: 0;
+}
+.panel-footer div.row{
+	margin-bottom: 35px;
+}
+#hours, #address {
+	line-height: 2;
+}
+#hours>span, #address>span{
+	font-size: 1.3em;
+}
+#address p {
+	color: #009933;
+	font-size: .8em;
+	line-height: 1.8;
+}
+#testimonials{
+	font-style: italic;
+}
+#testimonials p:nth-child(2){
+	margin-top: 25px;
+}
+/*end footer*/
+/*main body*/
+
+#call-btn > a {
+    font-size: 1.5em;
+    display: block;
+    margin: 0 20px;
+    padding: 10px;
+    border: 2px solid #FFF;
+    background-color: #C36241;
+    color: #174DD4;
+    text-shadow: 1px 1px 1px #FFF;
+  }
+  #xs-deliver {
+    margin-top: 5px;
+    font-size: .7em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .glyphicon-earphone{
+  	padding-right: 5px;
+  }
+  /*jumbotron*/
+  #jumbotron-xs{
+		padding: 0;
+		box-shadow: 0 0  50px #898989;
+		border: 2px solid #898989;
+		border-radius: 10px;
+	}
+	/*tiles*/
+	#menu-tile, #specials-tile, #map-tile{
+		height: 250px;
+		width: 100%;
+		margin-bottom: 15px;
+		position: relative;
+		border: 2px solid #174DD4;
+		overflow: hidden;
+		padding: 0;
+	}
+	#menu-tile:hover, #specials-tile:hover, #map-tile:hover{
+		box-shadow: 0 1px 5px 1px #CCCCCC;
+	}
+	#menu-tile{
+		background: url('../img/menu-tile600.jpg') no-repeat;
+		background-position: center;
+		padding 0;
+	}
+	#specials-tile{
+		background: url('../img/specials-tile600.jpg') no-repeat;
+		background-position: center;
+	}
+	#menu-tile span, #specials-tile span , #map-tile span {
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		width: 100%;
+		text-align: center;
+		font-size: 1.6em;
+		text-transform: uppercase;
+		background-color: #000;
+		color:#FFF;
+		opacity: .8;
+	}
+	#menu-tile, #specials-tile{
+		margin: 0 auto 15px;
+	}
+/*end Home page*/
+/*menu page*/
+
+.category-tile{
+	position: relative;
+	border: 2px solid #174DD4;
+	overflow: hidden;
+	width: 200px;
+	height: 200px;
+	margin-bottom: 15px;
+}
+.category-tile span{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 100%;
+	text-align: center;
+	font-size: 1.2em;
+	text-transform: uppercase;
+	background-color: #000;
+	color: #FFF;
+	opacity: .7;
+}
+.category-tile:hover{
+	box-shadow: 0 1px 5px 1px #CCCCCC;
+}
+#menu-categories-title + div {
+	margin-bottom: 50px;
+}
+.menu-item-tile hr{
+	width: 80%;
+}
+.
+/*end menu page*/
+/*single item page*/
+.menu-item-tile{
+	margin-bottom: 25px;
+}
+menu-item-tile .menu-item-price{
+	font-size: 1.1em;
+	text-align: right;
+	margin-right: -15px;
+	margin-top: -15px;
+}
+.menu-item-tile .menu-item-price span{
+	font-size: .6em;
+}
+.menu-item-photo{
+	position: relative;
+	border: 2px solid #174DD4;
+	overflow: hidden;
+	padding: 0;
+	margin-right: -15px;
+	margin-left: auto;
+	margin-bottom: 20px;
+  	max-width: 250px;
+}
+.menu-item-photo div{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 80px;
+	background-color: #C36241;
+	text-align: center;
+}
+.menu-item-description {
+	padding-right: 30px;
+}
+h3.menu-item-title {
+	margin: 0 0 10px;
+}
+.menu-item-details{
+	font-size: .7em;
+	font-style: italic;
+}
+/*end of single item page*/
+/*media*/
+@media (min-width: 1200px ) {
+	.jumbotron {
+		background: url('../img/norway2_1200.jpg') no-repeat;
+		height: 650px;
+		box-shadow: 0 0  50px #898989;
+		border: 2px solid #898989;
+	}
+}
+@media (min-width: 992px) and (max-width: 1199px) {
+	/*header*/
+	#logo-img {
+		background: url('../img/legourmet_med.jpg') no-repeat;
+		width:100px;
+		height: 100px;
+		margin-top: 5px 5px 5px 0;
+	}
+  	/*main*/
+	#section1, #section2, #section3{
+    	display: inline-block;
+  	}
+  	#section1, #section2{
+  		width: 49.6%;
+  	}
+  	#section3{
+  		width: 100%
+  	}
+  	.jumbotron {
+		background: url('../img/norway2_992.jpg') no-repeat;
+		height: 530px;
+		box-shadow: 0 0  50px #898989;
+		border: 2px solid #898989;
+	}
+}
+@media (min-width: 768px) and (max-width: 991px ) {
+	/*main*/
+	.jumbotron {
+		background: url('../img/norway2_800.jpg') no-repeat;
+		height: 450px;
+		box-shadow: 0 0  50px #898989;
+		border: 2px solid #898989;
+	}
+}
+@media (min-width: 767px) {
+	.navbar-brand h1 {
+		padding-top: 2px;
+	}
+	.navbar-brand p {
+		text-transform: uppercase;
+		font-size: .5em;
+		margin-top: 2px;
+	}
+	.navbar-brand p img{
+		height: 20px;
+	}
+	/*main*/
+	.container .jumbotron{
+		margin-top: 30px;
+		padding: 0;
+		box-shadow: 0 0 50px #898989;
+		border: 2 px solid #898989;
+	}
+	.menu-item-photo{
+		margin-right: auto;
+		margin-left: auto;
+	}
+}
+@media (max-width: 479px){
+	.navbar-brand h1 {
+		padding-top: 5px;
+		font-size: 6vw;
+	}
+	#menu-tile, #specials-tile{
+		width:100%;
+		margin: 0 auto 15px;
+	}
+	/*footer*/
+	.panel-footer section{
+		margin-bottom: 30px;
+		text-align: center;
+	}
+	.panel-footer section:nth-child{
+		margin-bottom: 0;
+	}
+	.panel-footer section hr{
+		width: 50%;
+	}
+	.col-xxs-12 {
+		width: 100%;
+		position: relative;
+		float: left;
+		min-height: 1px;
+		padding-right: 15px;
+		padding-left: 15px;
+	}
+}

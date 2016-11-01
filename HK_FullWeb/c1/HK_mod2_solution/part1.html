@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Color quessing game</title>
+</head>
+<body onload="doGame()" id="myBody">
+<script> 
+var colors = ["red", "blue", "black","yellow", "magenta","green"];
+
+var target, guessInputText, guessInput, targetText;
+var finished = false;
+var count = 0;
+
+function doGame(){
+	var randomNumber = Math.floor(Math.random() * (colors.length - 1));
+	target = randomNumber +1;
+	targetText = colors[target];
+
+
+	while (!finished) {
+		guessInputText = prompt ("Please guess the color that I am thinking \n\n"+
+								"Select among following colors:\n\n"+
+								"black, blue, green, magenta, red, yellow");
+		count++;
+		document.body.style.backgroundColor = "targetText";
+		console.log("1 color= "+targetText);
+		finished = checkGuess();
+	}
+}
+function checkGuess(){
+	if(!inArray(guessInputText, colors)){
+		return false;
+	}
+	if(guessInputText > targetText){
+		return false;
+	}
+	if(guessInputText < targetText){
+		return false;
+	}
+	alert("You entered correct color! The color was: "+ targetText +"\n\nIt took you " + count+" times to guess it!");
+	return true;	
+}
+function inArray(toCheck, myArray){
+  for(var i = 0; i < myArray.length; i++) {
+    if(toCheck == myArray[i]){
+    	console.log("2 correct "+toCheck+" "+myArray[i]);
+      return true;
+    }
+  }
+  console.log("3 wrong "+toCheck+" "+myArray[i]);
+  return false; 
+}
+</script>
+
+<h1>Color Guessing Game</h1>
+
+</body>
+</html>
