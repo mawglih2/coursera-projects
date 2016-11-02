@@ -26,357 +26,387 @@ var makeInstaller, meteorInstall;
 /////////////////////////////////////////////////////////////////////////////
                                                                            //
 makeInstaller = function (options) {                                       // 1
-  options = options || {};                                                 // 2
+  "use strict";                                                            // 2
                                                                            // 3
+  options = options || {};                                                 // 4
+                                                                           // 5
   // These file extensions will be appended to required module identifiers
-  // if they do not exactly match an installed module.                     // 5
-  var defaultExtensions = options.extensions || [".js", ".json"];          // 6
-                                                                           // 7
-  // This constructor will be used to instantiate the module objects       // 8
-  // passed to module factory functions (i.e. the third argument after     // 9
-  // require and exports).                                                 // 10
-  var Module = options.Module || function Module(id) {                     // 11
-    this.id = id;                                                          // 12
-    this.children = [];                                                    // 13
-  };                                                                       // 14
-                                                                           // 15
-  // If defined, the options.onInstall function will be called any time    // 16
-  // new modules are installed.                                            // 17
-  var onInstall = options.onInstall;                                       // 18
-                                                                           // 19
-  // If defined, the options.override function will be called before       // 20
-  // looking up any top-level package identifiers in node_modules          // 21
-  // directories. It can either return a string to provide an alternate    // 22
-  // package identifier, or a non-string value to prevent the lookup from  // 23
-  // proceeding.                                                           // 24
-  var override = options.override;                                         // 25
-                                                                           // 26
-  // If defined, the options.fallback function will be called when no      // 27
-  // installed module is found for a required module identifier. Often     // 28
-  // options.fallback will be implemented in terms of the native Node      // 29
-  // require function, which has the ability to load binary modules.       // 30
-  var fallback = options.fallback;                                         // 31
-                                                                           // 32
-  // Nothing special about MISSING.hasOwnProperty, except that it's fewer  // 33
-  // characters than Object.prototype.hasOwnProperty after minification.   // 34
-  var hasOwn = {}.hasOwnProperty;                                          // 35
-                                                                           // 36
-  // The file object representing the root directory of the installed      // 37
-  // module tree.                                                          // 38
-  var root = new File("/", new File("/.."));                               // 39
-  var rootRequire = makeRequire(root);                                     // 40
-                                                                           // 41
-  // Merges the given tree of directories and module factory functions     // 42
-  // into the tree of installed modules and returns a require function     // 43
-  // that behaves as if called from a module in the root directory.        // 44
-  function install(tree, options) {                                        // 45
-    if (isObject(tree)) {                                                  // 46
-      fileMergeContents(root, tree, options);                              // 47
-      if (isFunction(onInstall)) {                                         // 48
-        onInstall(rootRequire);                                            // 49
-      }                                                                    // 50
-    }                                                                      // 51
-    return rootRequire;                                                    // 52
-  }                                                                        // 53
-                                                                           // 54
-  function getOwn(obj, key) {                                              // 55
-    return hasOwn.call(obj, key) && obj[key];                              // 56
-  }                                                                        // 57
-                                                                           // 58
-  function isObject(value) {                                               // 59
-    return value && typeof value === "object";                             // 60
+  // if they do not exactly match an installed module.                     // 7
+  var defaultExtensions = options.extensions || [".js", ".json"];          // 8
+                                                                           // 9
+  // If defined, the options.onInstall function will be called any time    // 10
+  // new modules are installed.                                            // 11
+  var onInstall = options.onInstall;                                       // 12
+                                                                           // 13
+  // If defined, each module-specific require function will be passed to   // 14
+  // this function, along with the module.id of the parent module, and     // 15
+  // the result will be used in place of the original require function.    // 16
+  var wrapRequire = options.wrapRequire;                                   // 17
+                                                                           // 18
+  // If defined, the options.override function will be called before       // 19
+  // looking up any top-level package identifiers in node_modules          // 20
+  // directories. It can either return a string to provide an alternate    // 21
+  // package identifier, or a non-string value to prevent the lookup from  // 22
+  // proceeding.                                                           // 23
+  var override = options.override;                                         // 24
+                                                                           // 25
+  // If defined, the options.fallback function will be called when no      // 26
+  // installed module is found for a required module identifier. Often     // 27
+  // options.fallback will be implemented in terms of the native Node      // 28
+  // require function, which has the ability to load binary modules.       // 29
+  var fallback = options.fallback;                                         // 30
+                                                                           // 31
+  // Nothing special about MISSING.hasOwnProperty, except that it's fewer  // 32
+  // characters than Object.prototype.hasOwnProperty after minification.   // 33
+  var hasOwn = {}.hasOwnProperty;                                          // 34
+                                                                           // 35
+  // The file object representing the root directory of the installed      // 36
+  // module tree.                                                          // 37
+  var root = new File("/", new File("/.."));                               // 38
+  var rootRequire = makeRequire(root);                                     // 39
+                                                                           // 40
+  // Merges the given tree of directories and module factory functions     // 41
+  // into the tree of installed modules and returns a require function     // 42
+  // that behaves as if called from a module in the root directory.        // 43
+  function install(tree, options) {                                        // 44
+    if (isObject(tree)) {                                                  // 45
+      fileMergeContents(root, tree, options);                              // 46
+      if (isFunction(onInstall)) {                                         // 47
+        onInstall(rootRequire);                                            // 48
+      }                                                                    // 49
+    }                                                                      // 50
+    return rootRequire;                                                    // 51
+  }                                                                        // 52
+                                                                           // 53
+  // This constructor will be used to instantiate the module objects       // 54
+  // passed to module factory functions (i.e. the third argument after     // 55
+  // require and exports), and is exposed as install.Module in case the    // 56
+  // caller of makeInstaller wishes to modify Module.prototype.            // 57
+  function Module(id) {                                                    // 58
+    this.id = id;                                                          // 59
+    this.children = [];                                                    // 60
   }                                                                        // 61
                                                                            // 62
-  function isFunction(value) {                                             // 63
-    return typeof value === "function";                                    // 64
-  }                                                                        // 65
+  Module.prototype.resolve = function (id) {                               // 63
+    return this.require.resolve(id);                                       // 64
+  };                                                                       // 65
                                                                            // 66
-  function isString(value) {                                               // 67
-    return typeof value === "string";                                      // 68
-  }                                                                        // 69
-                                                                           // 70
-  function makeRequire(file) {                                             // 71
-    function require(id) {                                                 // 72
-      var result = fileResolve(file, id);                                  // 73
-      if (result) {                                                        // 74
-        return fileEvaluate(result, file.m);                               // 75
-      }                                                                    // 76
-                                                                           // 77
-      var error = new Error("Cannot find module '" + id + "'");            // 78
-                                                                           // 79
-      if (isFunction(fallback)) {                                          // 80
-        return fallback(                                                   // 81
-          id, // The missing module identifier.                            // 82
-          file.m.id, // The path of the requiring file.                    // 83
-          error // The error we would have thrown.                         // 84
-        );                                                                 // 85
-      }                                                                    // 86
-                                                                           // 87
-      throw error;                                                         // 88
-    }                                                                      // 89
-                                                                           // 90
-    require.resolve = function (id) {                                      // 91
-      var f = fileResolve(file, id);                                       // 92
-      if (f) return f.m.id;                                                // 93
-      throw new Error("Cannot find module '" + id + "'");                  // 94
-    };                                                                     // 95
-                                                                           // 96
-    return require;                                                        // 97
-  }                                                                        // 98
-                                                                           // 99
-  // File objects represent either directories or modules that have been   // 100
+  install.Module = Module;                                                 // 67
+                                                                           // 68
+  function getOwn(obj, key) {                                              // 69
+    return hasOwn.call(obj, key) && obj[key];                              // 70
+  }                                                                        // 71
+                                                                           // 72
+  function isObject(value) {                                               // 73
+    return value && typeof value === "object";                             // 74
+  }                                                                        // 75
+                                                                           // 76
+  function isFunction(value) {                                             // 77
+    return typeof value === "function";                                    // 78
+  }                                                                        // 79
+                                                                           // 80
+  function isString(value) {                                               // 81
+    return typeof value === "string";                                      // 82
+  }                                                                        // 83
+                                                                           // 84
+  function makeRequire(file) {                                             // 85
+    function require(id) {                                                 // 86
+      var result = fileResolve(file, id);                                  // 87
+      if (result) {                                                        // 88
+        return fileEvaluate(result, file.m);                               // 89
+      }                                                                    // 90
+                                                                           // 91
+      var error = new Error("Cannot find module '" + id + "'");            // 92
+                                                                           // 93
+      if (isFunction(fallback)) {                                          // 94
+        return fallback(                                                   // 95
+          id, // The missing module identifier.                            // 96
+          file.m.id, // The path of the requiring file.                    // 97
+          error // The error we would have thrown.                         // 98
+        );                                                                 // 99
+      }                                                                    // 100
+                                                                           // 101
+      throw error;                                                         // 102
+    }                                                                      // 103
+                                                                           // 104
+    if (isFunction(wrapRequire)) {                                         // 105
+      require = wrapRequire(require, file.m.id);                           // 106
+    }                                                                      // 107
+                                                                           // 108
+    require.resolve = function (id) {                                      // 109
+      var f = fileResolve(file, id);                                       // 110
+      if (f) return f.m.id;                                                // 111
+      var error = new Error("Cannot find module '" + id + "'");            // 112
+      if (fallback && isFunction(fallback.resolve)) {                      // 113
+        return fallback.resolve(id, file.m.id, error);                     // 114
+      }                                                                    // 115
+      throw error;                                                         // 116
+    };                                                                     // 117
+                                                                           // 118
+    return require;                                                        // 119
+  }                                                                        // 120
+                                                                           // 121
+  // File objects represent either directories or modules that have been   // 122
   // installed. When a `File` respresents a directory, its `.c` (contents)
-  // property is an object containing the names of the files (or           // 102
+  // property is an object containing the names of the files (or           // 124
   // directories) that it contains. When a `File` represents a module, its
-  // `.c` property is a function that can be invoked with the appropriate  // 104
+  // `.c` property is a function that can be invoked with the appropriate  // 126
   // `(require, exports, module)` arguments to evaluate the module. If the
-  // `.c` property is a string, that string will be resolved as a module   // 106
-  // identifier, and the exports of the resulting module will provide the  // 107
+  // `.c` property is a string, that string will be resolved as a module   // 128
+  // identifier, and the exports of the resulting module will provide the  // 129
   // exports of the original file. The `.p` (parent) property of a File is
-  // either a directory `File` or `null`. Note that a child may claim      // 109
-  // another `File` as its parent even if the parent does not have an      // 110
-  // entry for that child in its `.c` object.  This is important for       // 111
+  // either a directory `File` or `null`. Note that a child may claim      // 131
+  // another `File` as its parent even if the parent does not have an      // 132
+  // entry for that child in its `.c` object.  This is important for       // 133
   // implementing anonymous files, and preventing child modules from using
-  // `../relative/identifier` syntax to examine unrelated modules.         // 113
-  function File(name, parent) {                                            // 114
-    var file = this;                                                       // 115
-                                                                           // 116
-    // Link to the parent file.                                            // 117
-    file.p = parent = parent || null;                                      // 118
-                                                                           // 119
-    // The module object for this File, which will eventually boast an     // 120
-    // .exports property when/if the file is evaluated.                    // 121
-    file.m = new Module(name);                                             // 122
-  }                                                                        // 123
-                                                                           // 124
-  function fileEvaluate(file, parentModule) {                              // 125
-    var contents = file && file.c;                                         // 126
-    var module = file.m;                                                   // 127
-    if (! hasOwn.call(module, "exports")) {                                // 128
-      if (parentModule) {                                                  // 129
-        module.parent = parentModule;                                      // 130
-        var children = parentModule.children;                              // 131
-        if (Array.isArray(children)) {                                     // 132
-          children.push(module);                                           // 133
-        }                                                                  // 134
-      }                                                                    // 135
-                                                                           // 136
+  // `../relative/identifier` syntax to examine unrelated modules.         // 135
+  function File(name, parent) {                                            // 136
+    var file = this;                                                       // 137
+                                                                           // 138
+    // Link to the parent file.                                            // 139
+    file.p = parent = parent || null;                                      // 140
+                                                                           // 141
+    // The module object for this File, which will eventually boast an     // 142
+    // .exports property when/if the file is evaluated.                    // 143
+    file.m = new Module(name);                                             // 144
+  }                                                                        // 145
+                                                                           // 146
+  function fileEvaluate(file, parentModule) {                              // 147
+    var contents = file && file.c;                                         // 148
+    var module = file.m;                                                   // 149
+                                                                           // 150
+    if (! hasOwn.call(module, "exports")) {                                // 151
+      if (parentModule) {                                                  // 152
+        module.parent = parentModule;                                      // 153
+        var children = parentModule.children;                              // 154
+        if (Array.isArray(children)) {                                     // 155
+          children.push(module);                                           // 156
+        }                                                                  // 157
+      }                                                                    // 158
+                                                                           // 159
       // If a Module.prototype.useNode method is defined, give it a chance
-      // to define module.exports based on module.id using Node.           // 138
-      if (! isFunction(module.useNode) ||                                  // 139
-          ! module.useNode()) {                                            // 140
-        contents(                                                          // 141
-          file.r = file.r || makeRequire(file),                            // 142
-          module.exports = {},                                             // 143
-          module,                                                          // 144
-          file.m.id,                                                       // 145
-          file.p.m.id                                                      // 146
-        );                                                                 // 147
-      }                                                                    // 148
-    }                                                                      // 149
-    return module.exports;                                                 // 150
-  }                                                                        // 151
-                                                                           // 152
-  function fileIsDirectory(file) {                                         // 153
-    return file && isObject(file.c);                                       // 154
-  }                                                                        // 155
-                                                                           // 156
-  function fileMergeContents(file, contents, options) {                    // 157
-    // If contents is an array of strings and functions, return the last   // 158
-    // function with a `.d` property containing all the strings.           // 159
-    if (Array.isArray(contents)) {                                         // 160
-      var deps = [];                                                       // 161
-                                                                           // 162
-      contents.forEach(function (item) {                                   // 163
-        if (isString(item)) {                                              // 164
-          deps.push(item);                                                 // 165
-        } else if (isFunction(item)) {                                     // 166
-          contents = item;                                                 // 167
-        }                                                                  // 168
-      });                                                                  // 169
-                                                                           // 170
-      if (isFunction(contents)) {                                          // 171
-        contents.d = deps;                                                 // 172
-      } else {                                                             // 173
-        // If the array did not contain a function, merge nothing.         // 174
-        contents = null;                                                   // 175
-      }                                                                    // 176
-                                                                           // 177
-    } else if (isFunction(contents)) {                                     // 178
-      // If contents is already a function, make sure it has `.d`.         // 179
-      contents.d = contents.d || [];                                       // 180
-                                                                           // 181
-    } else if (! isString(contents) &&                                     // 182
-               ! isObject(contents)) {                                     // 183
-      // If contents is neither an array nor a function nor a string nor   // 184
-      // an object, just give up and merge nothing.                        // 185
-      contents = null;                                                     // 186
-    }                                                                      // 187
-                                                                           // 188
-    if (contents) {                                                        // 189
-      file.c = file.c || (isObject(contents) ? {} : contents);             // 190
-      if (isObject(contents) && fileIsDirectory(file)) {                   // 191
-        Object.keys(contents).forEach(function (key) {                     // 192
-          if (key === "..") {                                              // 193
-            child = file.p;                                                // 194
-                                                                           // 195
-          } else {                                                         // 196
-            var child = getOwn(file.c, key);                               // 197
-            if (! child) {                                                 // 198
-              child = file.c[key] = new File(                              // 199
-                file.m.id.replace(/\/*$/, "/") + key,                      // 200
-                file                                                       // 201
-              );                                                           // 202
-                                                                           // 203
-              child.o = options;                                           // 204
-            }                                                              // 205
-          }                                                                // 206
+      // to define module.exports based on module.id using Node.           // 161
+      if (! isFunction(module.useNode) ||                                  // 162
+          ! module.useNode()) {                                            // 163
+        contents(                                                          // 164
+          module.require = module.require || makeRequire(file),            // 165
+          module.exports = {},                                             // 166
+          module,                                                          // 167
+          file.m.id,                                                       // 168
+          file.p.m.id                                                      // 169
+        );                                                                 // 170
+      }                                                                    // 171
+                                                                           // 172
+      module.loaded = true;                                                // 173
+    }                                                                      // 174
+                                                                           // 175
+    if (isFunction(module.runModuleSetters)) {                             // 176
+      module.runModuleSetters();                                           // 177
+    }                                                                      // 178
+                                                                           // 179
+    return module.exports;                                                 // 180
+  }                                                                        // 181
+                                                                           // 182
+  function fileIsDirectory(file) {                                         // 183
+    return file && isObject(file.c);                                       // 184
+  }                                                                        // 185
+                                                                           // 186
+  function fileMergeContents(file, contents, options) {                    // 187
+    // If contents is an array of strings and functions, return the last   // 188
+    // function with a `.d` property containing all the strings.           // 189
+    if (Array.isArray(contents)) {                                         // 190
+      var deps = [];                                                       // 191
+                                                                           // 192
+      contents.forEach(function (item) {                                   // 193
+        if (isString(item)) {                                              // 194
+          deps.push(item);                                                 // 195
+        } else if (isFunction(item)) {                                     // 196
+          contents = item;                                                 // 197
+        }                                                                  // 198
+      });                                                                  // 199
+                                                                           // 200
+      if (isFunction(contents)) {                                          // 201
+        contents.d = deps;                                                 // 202
+      } else {                                                             // 203
+        // If the array did not contain a function, merge nothing.         // 204
+        contents = null;                                                   // 205
+      }                                                                    // 206
                                                                            // 207
-          fileMergeContents(child, contents[key], options);                // 208
-        });                                                                // 209
-      }                                                                    // 210
-    }                                                                      // 211
-  }                                                                        // 212
-                                                                           // 213
-  function fileGetExtensions(file) {                                       // 214
-    return file.o && file.o.extensions || defaultExtensions;               // 215
-  }                                                                        // 216
-                                                                           // 217
-  function fileAppendIdPart(file, part, extensions) {                      // 218
-    // Always append relative to a directory.                              // 219
-    while (file && ! fileIsDirectory(file)) {                              // 220
-      file = file.p;                                                       // 221
-    }                                                                      // 222
-                                                                           // 223
-    if (! file || ! part || part === ".") {                                // 224
-      return file;                                                         // 225
-    }                                                                      // 226
-                                                                           // 227
-    if (part === "..") {                                                   // 228
-      return file.p;                                                       // 229
-    }                                                                      // 230
-                                                                           // 231
-    var exactChild = getOwn(file.c, part);                                 // 232
+    } else if (isFunction(contents)) {                                     // 208
+      // If contents is already a function, make sure it has `.d`.         // 209
+      contents.d = contents.d || [];                                       // 210
+                                                                           // 211
+    } else if (! isString(contents) &&                                     // 212
+               ! isObject(contents)) {                                     // 213
+      // If contents is neither an array nor a function nor a string nor   // 214
+      // an object, just give up and merge nothing.                        // 215
+      contents = null;                                                     // 216
+    }                                                                      // 217
+                                                                           // 218
+    if (contents) {                                                        // 219
+      file.c = file.c || (isObject(contents) ? {} : contents);             // 220
+      if (isObject(contents) && fileIsDirectory(file)) {                   // 221
+        Object.keys(contents).forEach(function (key) {                     // 222
+          if (key === "..") {                                              // 223
+            child = file.p;                                                // 224
+                                                                           // 225
+          } else {                                                         // 226
+            var child = getOwn(file.c, key);                               // 227
+            if (! child) {                                                 // 228
+              child = file.c[key] = new File(                              // 229
+                file.m.id.replace(/\/*$/, "/") + key,                      // 230
+                file                                                       // 231
+              );                                                           // 232
                                                                            // 233
-    // Only consider multiple file extensions if this part is the last     // 234
+              child.o = options;                                           // 234
+            }                                                              // 235
+          }                                                                // 236
+                                                                           // 237
+          fileMergeContents(child, contents[key], options);                // 238
+        });                                                                // 239
+      }                                                                    // 240
+    }                                                                      // 241
+  }                                                                        // 242
+                                                                           // 243
+  function fileGetExtensions(file) {                                       // 244
+    return file.o && file.o.extensions || defaultExtensions;               // 245
+  }                                                                        // 246
+                                                                           // 247
+  function fileAppendIdPart(file, part, extensions) {                      // 248
+    // Always append relative to a directory.                              // 249
+    while (file && ! fileIsDirectory(file)) {                              // 250
+      file = file.p;                                                       // 251
+    }                                                                      // 252
+                                                                           // 253
+    if (! file || ! part || part === ".") {                                // 254
+      return file;                                                         // 255
+    }                                                                      // 256
+                                                                           // 257
+    if (part === "..") {                                                   // 258
+      return file.p;                                                       // 259
+    }                                                                      // 260
+                                                                           // 261
+    var exactChild = getOwn(file.c, part);                                 // 262
+                                                                           // 263
+    // Only consider multiple file extensions if this part is the last     // 264
     // part of a module identifier and not equal to `.` or `..`, and there
-    // was no exact match or the exact match was a directory.              // 236
-    if (extensions && (! exactChild || fileIsDirectory(exactChild))) {     // 237
-      for (var e = 0; e < extensions.length; ++e) {                        // 238
-        var child = getOwn(file.c, part + extensions[e]);                  // 239
-        if (child) {                                                       // 240
-          return child;                                                    // 241
-        }                                                                  // 242
-      }                                                                    // 243
-    }                                                                      // 244
-                                                                           // 245
-    return exactChild;                                                     // 246
-  }                                                                        // 247
-                                                                           // 248
-  function fileAppendId(file, id, extensions) {                            // 249
-    var parts = id.split("/");                                             // 250
-                                                                           // 251
-    // Use `Array.prototype.every` to terminate iteration early if         // 252
-    // `fileAppendIdPart` returns a falsy value.                           // 253
-    parts.every(function (part, i) {                                       // 254
-      return file = i < parts.length - 1                                   // 255
-        ? fileAppendIdPart(file, part)                                     // 256
-        : fileAppendIdPart(file, part, extensions);                        // 257
-    });                                                                    // 258
-                                                                           // 259
-    return file;                                                           // 260
-  }                                                                        // 261
-                                                                           // 262
-  function fileResolve(file, id, seenDirFiles) {                           // 263
-    var extensions = fileGetExtensions(file);                              // 264
-                                                                           // 265
-    file =                                                                 // 266
-      // Absolute module identifiers (i.e. those that begin with a `/`     // 267
-      // character) are interpreted relative to the root directory, which  // 268
-      // is a slight deviation from Node, which has access to the entire   // 269
-      // file system.                                                      // 270
-      id.charAt(0) === "/" ? fileAppendId(root, id, extensions) :          // 271
-      // Relative module identifiers are interpreted relative to the       // 272
-      // current file, naturally.                                          // 273
-      id.charAt(0) === "." ? fileAppendId(file, id, extensions) :          // 274
-      // Top-level module identifiers are interpreted as referring to      // 275
-      // packages in `node_modules` directories.                           // 276
-      nodeModulesLookup(file, id, extensions);                             // 277
+    // was no exact match or the exact match was a directory.              // 266
+    if (extensions && (! exactChild || fileIsDirectory(exactChild))) {     // 267
+      for (var e = 0; e < extensions.length; ++e) {                        // 268
+        var child = getOwn(file.c, part + extensions[e]);                  // 269
+        if (child) {                                                       // 270
+          return child;                                                    // 271
+        }                                                                  // 272
+      }                                                                    // 273
+    }                                                                      // 274
+                                                                           // 275
+    return exactChild;                                                     // 276
+  }                                                                        // 277
                                                                            // 278
-    // If the identifier resolves to a directory, we use the same logic as
-    // Node to find an `index.js` or `package.json` file to evaluate.      // 280
-    while (fileIsDirectory(file)) {                                        // 281
-      seenDirFiles = seenDirFiles || [];                                   // 282
-                                                                           // 283
-      // If the "main" field of a `package.json` file resolves to a        // 284
-      // directory we've already considered, then we should not attempt to
-      // read the same `package.json` file again. Using an array as a set  // 286
-      // is acceptable here because the number of directories to consider  // 287
-      // is rarely greater than 1 or 2. Also, using indexOf allows us to   // 288
-      // store File objects instead of strings.                            // 289
-      if (seenDirFiles.indexOf(file) < 0) {                                // 290
-        seenDirFiles.push(file);                                           // 291
+  function fileAppendId(file, id, extensions) {                            // 279
+    var parts = id.split("/");                                             // 280
+                                                                           // 281
+    // Use `Array.prototype.every` to terminate iteration early if         // 282
+    // `fileAppendIdPart` returns a falsy value.                           // 283
+    parts.every(function (part, i) {                                       // 284
+      return file = i < parts.length - 1                                   // 285
+        ? fileAppendIdPart(file, part)                                     // 286
+        : fileAppendIdPart(file, part, extensions);                        // 287
+    });                                                                    // 288
+                                                                           // 289
+    return file;                                                           // 290
+  }                                                                        // 291
                                                                            // 292
-        var pkgJsonFile = fileAppendIdPart(file, "package.json");          // 293
-        var main = pkgJsonFile && fileEvaluate(pkgJsonFile).main;          // 294
-        if (isString(main)) {                                              // 295
-          // The "main" field of package.json does not have to begin with  // 296
-          // ./ to be considered relative, so first we try simply          // 297
-          // appending it to the directory path before falling back to a   // 298
-          // full fileResolve, which might return a package from a         // 299
-          // node_modules directory.                                       // 300
-          file = fileAppendId(file, main, extensions) ||                   // 301
-            fileResolve(file, main, seenDirFiles);                         // 302
-                                                                           // 303
-          if (file) {                                                      // 304
-            // The fileAppendId call above may have returned a directory,  // 305
-            // so continue the loop to make sure we resolve it to a        // 306
-            // non-directory file.                                         // 307
-            continue;                                                      // 308
-          }                                                                // 309
-        }                                                                  // 310
-      }                                                                    // 311
-                                                                           // 312
-      // If we didn't find a `package.json` file, or it didn't have a      // 313
-      // resolvable `.main` property, the only possibility left to         // 314
-      // consider is that this directory contains an `index.js` module.    // 315
-      // This assignment almost always terminates the while loop, because  // 316
-      // there's very little chance `fileIsDirectory(file)` will be true   // 317
-      // for the result of `fileAppendIdPart(file, "index.js")`. However,  // 318
-      // in principle it is remotely possible that a file called           // 319
-      // `index.js` could be a directory instead of a file.                // 320
-      file = fileAppendIdPart(file, "index.js");                           // 321
-    }                                                                      // 322
-                                                                           // 323
-    if (file && isString(file.c)) {                                        // 324
-      file = fileResolve(file, file.c, seenDirFiles);                      // 325
-    }                                                                      // 326
-                                                                           // 327
-    return file;                                                           // 328
-  };                                                                       // 329
-                                                                           // 330
-  function nodeModulesLookup(file, id, extensions) {                       // 331
-    if (isFunction(override)) {                                            // 332
-      id = override(id, file.m.id);                                        // 333
-    }                                                                      // 334
-                                                                           // 335
-    if (isString(id)) {                                                    // 336
-      for (var resolved; file && ! resolved; file = file.p) {              // 337
-        resolved = fileIsDirectory(file) &&                                // 338
-          fileAppendId(file, "node_modules/" + id, extensions);            // 339
-      }                                                                    // 340
-                                                                           // 341
-      return resolved;                                                     // 342
-    }                                                                      // 343
-  }                                                                        // 344
-                                                                           // 345
-  return install;                                                          // 346
-};                                                                         // 347
-                                                                           // 348
-if (typeof exports === "object") {                                         // 349
-  exports.makeInstaller = makeInstaller;                                   // 350
-}                                                                          // 351
-                                                                           // 352
+  function fileResolve(file, id, seenDirFiles) {                           // 293
+    var extensions = fileGetExtensions(file);                              // 294
+                                                                           // 295
+    file =                                                                 // 296
+      // Absolute module identifiers (i.e. those that begin with a `/`     // 297
+      // character) are interpreted relative to the root directory, which  // 298
+      // is a slight deviation from Node, which has access to the entire   // 299
+      // file system.                                                      // 300
+      id.charAt(0) === "/" ? fileAppendId(root, id, extensions) :          // 301
+      // Relative module identifiers are interpreted relative to the       // 302
+      // current file, naturally.                                          // 303
+      id.charAt(0) === "." ? fileAppendId(file, id, extensions) :          // 304
+      // Top-level module identifiers are interpreted as referring to      // 305
+      // packages in `node_modules` directories.                           // 306
+      nodeModulesLookup(file, id, extensions);                             // 307
+                                                                           // 308
+    // If the identifier resolves to a directory, we use the same logic as
+    // Node to find an `index.js` or `package.json` file to evaluate.      // 310
+    while (fileIsDirectory(file)) {                                        // 311
+      seenDirFiles = seenDirFiles || [];                                   // 312
+                                                                           // 313
+      // If the "main" field of a `package.json` file resolves to a        // 314
+      // directory we've already considered, then we should not attempt to
+      // read the same `package.json` file again. Using an array as a set  // 316
+      // is acceptable here because the number of directories to consider  // 317
+      // is rarely greater than 1 or 2. Also, using indexOf allows us to   // 318
+      // store File objects instead of strings.                            // 319
+      if (seenDirFiles.indexOf(file) < 0) {                                // 320
+        seenDirFiles.push(file);                                           // 321
+                                                                           // 322
+        var pkgJsonFile = fileAppendIdPart(file, "package.json");          // 323
+        var main = pkgJsonFile && fileEvaluate(pkgJsonFile).main;          // 324
+        if (isString(main)) {                                              // 325
+          // The "main" field of package.json does not have to begin with  // 326
+          // ./ to be considered relative, so first we try simply          // 327
+          // appending it to the directory path before falling back to a   // 328
+          // full fileResolve, which might return a package from a         // 329
+          // node_modules directory.                                       // 330
+          file = fileAppendId(file, main, extensions) ||                   // 331
+            fileResolve(file, main, seenDirFiles);                         // 332
+                                                                           // 333
+          if (file) {                                                      // 334
+            // The fileAppendId call above may have returned a directory,  // 335
+            // so continue the loop to make sure we resolve it to a        // 336
+            // non-directory file.                                         // 337
+            continue;                                                      // 338
+          }                                                                // 339
+        }                                                                  // 340
+      }                                                                    // 341
+                                                                           // 342
+      // If we didn't find a `package.json` file, or it didn't have a      // 343
+      // resolvable `.main` property, the only possibility left to         // 344
+      // consider is that this directory contains an `index.js` module.    // 345
+      // This assignment almost always terminates the while loop, because  // 346
+      // there's very little chance `fileIsDirectory(file)` will be true   // 347
+      // for the result of `fileAppendIdPart(file, "index.js")`. However,  // 348
+      // in principle it is remotely possible that a file called           // 349
+      // `index.js` could be a directory instead of a file.                // 350
+      file = fileAppendIdPart(file, "index.js");                           // 351
+    }                                                                      // 352
+                                                                           // 353
+    if (file && isString(file.c)) {                                        // 354
+      file = fileResolve(file, file.c, seenDirFiles);                      // 355
+    }                                                                      // 356
+                                                                           // 357
+    return file;                                                           // 358
+  };                                                                       // 359
+                                                                           // 360
+  function nodeModulesLookup(file, id, extensions) {                       // 361
+    if (isFunction(override)) {                                            // 362
+      id = override(id, file.m.id);                                        // 363
+    }                                                                      // 364
+                                                                           // 365
+    if (isString(id)) {                                                    // 366
+      for (var resolved; file && ! resolved; file = file.p) {              // 367
+        resolved = fileIsDirectory(file) &&                                // 368
+          fileAppendId(file, "node_modules/" + id, extensions);            // 369
+      }                                                                    // 370
+                                                                           // 371
+      return resolved;                                                     // 372
+    }                                                                      // 373
+  }                                                                        // 374
+                                                                           // 375
+  return install;                                                          // 376
+};                                                                         // 377
+                                                                           // 378
+if (typeof exports === "object") {                                         // 379
+  exports.makeInstaller = makeInstaller;                                   // 380
+}                                                                          // 381
+                                                                           // 382
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -399,68 +429,83 @@ var hasOwn = options.hasOwnProperty;                                       // 2
 // RegExp matching strings that don't start with a `.` or a `/`.           // 4
 var topLevelIdPattern = /^[^./]/;                                          // 5
                                                                            // 6
-// This function will be called whenever a module identifier that hasn't   // 7
+if (typeof Profile === "function" &&                                       // 7
+    process.env.METEOR_PROFILE) {                                          // 8
+  options.wrapRequire = function (require) {                               // 9
+    return Profile(function (id) {                                         // 10
+      return "require(" + JSON.stringify(id) + ")";                        // 11
+    }, require);                                                           // 12
+  };                                                                       // 13
+}                                                                          // 14
+                                                                           // 15
+// This function will be called whenever a module identifier that hasn't   // 16
 // been installed is required. For backwards compatibility, and so that we
-// can require binary dependencies on the server, we implement the         // 9
-// fallback in terms of Npm.require.                                       // 10
-options.fallback = function (id, dir, error) {                             // 11
-  // For simplicity, we honor only top-level module identifiers here.      // 12
-  // We could try to honor relative and absolute module identifiers by     // 13
+// can require binary dependencies on the server, we implement the         // 18
+// fallback in terms of Npm.require.                                       // 19
+options.fallback = function (id, parentId, error) {                        // 20
+  // For simplicity, we honor only top-level module identifiers here.      // 21
+  // We could try to honor relative and absolute module identifiers by     // 22
   // somehow combining `id` with `dir`, but we'd have to be really careful
-  // that the resulting modules were located in a known directory (not     // 15
-  // some arbitrary location on the file system), and we only really need  // 16
-  // the fallback for dependencies installed in node_modules directories.  // 17
-  if (topLevelIdPattern.test(id)) {                                        // 18
-    if (typeof Npm === "object" &&                                         // 19
-        typeof Npm.require === "function") {                               // 20
-      return Npm.require(id);                                              // 21
-    }                                                                      // 22
-  }                                                                        // 23
-                                                                           // 24
-  throw error;                                                             // 25
-};                                                                         // 26
-                                                                           // 27
-if (Meteor.isServer) {                                                     // 28
-  // Defining Module.prototype.useNode allows the module system to         // 29
-  // delegate evaluation to Node, unless useNode returns false.            // 30
-  (options.Module = function Module(id) {                                  // 31
-    // Same as the default Module constructor implementation.              // 32
-    this.id = id;                                                          // 33
-    this.children = [];                                                    // 34
-  }).prototype.useNode = function () {                                     // 35
-    if (typeof npmRequire !== "function") {                                // 36
-      // Can't use Node if npmRequire is not defined.                      // 37
-      return false;                                                        // 38
-    }                                                                      // 39
-                                                                           // 40
-    var parts = this.id.split("/");                                        // 41
-    var start = 0;                                                         // 42
-    if (parts[start] === "") ++start;                                      // 43
-    if (parts[start] === "node_modules" &&                                 // 44
-        parts[start + 1] === "meteor") {                                   // 45
-      start += 2;                                                          // 46
-    }                                                                      // 47
-                                                                           // 48
-    if (parts.indexOf("node_modules", start) < 0) {                        // 49
-      // Don't try to use Node for modules that aren't in node_modules     // 50
-      // directories.                                                      // 51
-      return false;                                                        // 52
-    }                                                                      // 53
-                                                                           // 54
-    try {                                                                  // 55
-      npmRequire.resolve(this.id);                                         // 56
-    } catch (e) {                                                          // 57
-      return false;                                                        // 58
-    }                                                                      // 59
-                                                                           // 60
-    this.exports = npmRequire(this.id);                                    // 61
-                                                                           // 62
-    return true;                                                           // 63
-  };                                                                       // 64
-}                                                                          // 65
-                                                                           // 66
-meteorInstall = makeInstaller(options);                                    // 67
-                                                                           // 68
+  // that the resulting modules were located in a known directory (not     // 24
+  // some arbitrary location on the file system), and we only really need  // 25
+  // the fallback for dependencies installed in node_modules directories.  // 26
+  if (topLevelIdPattern.test(id)) {                                        // 27
+    if (typeof Npm === "object" &&                                         // 28
+        typeof Npm.require === "function") {                               // 29
+      return Npm.require(id);                                              // 30
+    }                                                                      // 31
+  }                                                                        // 32
+                                                                           // 33
+  throw error;                                                             // 34
+};                                                                         // 35
+                                                                           // 36
+options.fallback.resolve = function (id, parentId, error) {                // 37
+  if (Meteor.isServer &&                                                   // 38
+      topLevelIdPattern.test(id)) {                                        // 39
+    // Allow any top-level identifier to resolve to itself on the server,  // 40
+    // so that options.fallback can have a chance to handle it.            // 41
+    return id;                                                             // 42
+  }                                                                        // 43
+                                                                           // 44
+  throw error;                                                             // 45
+};                                                                         // 46
+                                                                           // 47
+meteorInstall = makeInstaller(options);                                    // 48
+var Mp = meteorInstall.Module.prototype;                                   // 49
+                                                                           // 50
+if (Meteor.isServer) {                                                     // 51
+  Mp.useNode = function () {                                               // 52
+    if (typeof npmRequire !== "function") {                                // 53
+      // Can't use Node if npmRequire is not defined.                      // 54
+      return false;                                                        // 55
+    }                                                                      // 56
+                                                                           // 57
+    var parts = this.id.split("/");                                        // 58
+    var start = 0;                                                         // 59
+    if (parts[start] === "") ++start;                                      // 60
+    if (parts[start] === "node_modules" &&                                 // 61
+        parts[start + 1] === "meteor") {                                   // 62
+      start += 2;                                                          // 63
+    }                                                                      // 64
+                                                                           // 65
+    if (parts.indexOf("node_modules", start) < 0) {                        // 66
+      // Don't try to use Node for modules that aren't in node_modules     // 67
+      // directories.                                                      // 68
+      return false;                                                        // 69
+    }                                                                      // 70
+                                                                           // 71
+    try {                                                                  // 72
+      npmRequire.resolve(this.id);                                         // 73
+    } catch (e) {                                                          // 74
+      return false;                                                        // 75
+    }                                                                      // 76
+                                                                           // 77
+    this.exports = npmRequire(this.id);                                    // 78
+                                                                           // 79
+    return true;                                                           // 80
+  };                                                                       // 81
+}                                                                          // 82
+                                                                           // 83
 /////////////////////////////////////////////////////////////////////////////
 
 }).call(this);

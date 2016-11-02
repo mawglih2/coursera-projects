@@ -3,12 +3,10 @@
   "arch": "os",
   "load": [
     {
-      "sourceMap": "packages/underscore.js.map",
       "path": "packages/underscore.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/meteor/1.1.14/npm/node_modules",
-      "sourceMap": "packages/meteor.js.map",
+      "node_modules": "npm/node_modules/meteor/meteor/node_modules",
       "path": "packages/meteor.js"
     },
     {
@@ -18,13 +16,31 @@
       "path": "packages/mobile-experience.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/npm-mongo/1.4.43/npm/node_modules",
-      "sourceMap": "packages/npm-mongo.js.map",
+      "node_modules": "npm/node_modules/meteor/npm-mongo/node_modules",
       "path": "packages/npm-mongo.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/babel-compiler/6.6.4/npm/node_modules",
-      "sourceMap": "packages/babel-compiler.js.map",
+      "node_modules": "npm/node_modules/meteor/modules-runtime/node_modules",
+      "path": "packages/modules-runtime.js"
+    },
+    {
+      "node_modules": "npm/node_modules/meteor/modules/node_modules",
+      "path": "packages/modules.js"
+    },
+    {
+      "node_modules": "npm/node_modules/meteor/es5-shim/node_modules",
+      "path": "packages/es5-shim.js"
+    },
+    {
+      "node_modules": "npm/node_modules/meteor/promise/node_modules",
+      "path": "packages/promise.js"
+    },
+    {
+      "node_modules": "npm/node_modules/meteor/ecmascript-runtime/node_modules",
+      "path": "packages/ecmascript-runtime.js"
+    },
+    {
+      "node_modules": "npm/node_modules/meteor/babel-compiler/node_modules",
       "path": "packages/babel-compiler.js"
     },
     {
@@ -32,52 +48,22 @@
       "path": "packages/ecmascript.js"
     },
     {
-      "sourceMap": "packages/base64.js.map",
       "path": "packages/base64.js"
     },
     {
-      "sourceMap": "packages/ejson.js.map",
       "path": "packages/ejson.js"
     },
     {
-      "sourceMap": "packages/id-map.js.map",
       "path": "packages/id-map.js"
     },
     {
-      "sourceMap": "packages/ordered-dict.js.map",
       "path": "packages/ordered-dict.js"
     },
     {
-      "sourceMap": "packages/tracker.js.map",
       "path": "packages/tracker.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/modules-runtime/0.6.3/npm/node_modules",
-      "sourceMap": "packages/modules-runtime.js.map",
-      "path": "packages/modules-runtime.js"
-    },
-    {
-      "sourceMap": "packages/modules.js.map",
-      "path": "packages/modules.js"
-    },
-    {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/es5-shim/4.5.10/npm/node_modules",
-      "sourceMap": "packages/es5-shim.js.map",
-      "path": "packages/es5-shim.js"
-    },
-    {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/promise/0.6.7/npm/node_modules",
-      "sourceMap": "packages/promise.js.map",
-      "path": "packages/promise.js"
-    },
-    {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/ecmascript-runtime/0.2.10/npm/node_modules",
-      "sourceMap": "packages/ecmascript-runtime.js.map",
-      "path": "packages/ecmascript-runtime.js"
-    },
-    {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/babel-runtime/0.1.8/npm/node_modules",
-      "sourceMap": "packages/babel-runtime.js.map",
+      "node_modules": "npm/node_modules/meteor/babel-runtime/node_modules",
       "path": "packages/babel-runtime.js"
     },
     {
@@ -85,90 +71,71 @@
       "path": "packages/random.js"
     },
     {
-      "sourceMap": "packages/mongo-id.js.map",
       "path": "packages/mongo-id.js"
     },
     {
-      "sourceMap": "packages/diff-sequence.js.map",
       "path": "packages/diff-sequence.js"
     },
     {
-      "sourceMap": "packages/geojson-utils.js.map",
       "path": "packages/geojson-utils.js"
     },
     {
-      "sourceMap": "packages/minimongo.js.map",
       "path": "packages/minimongo.js"
     },
     {
-      "sourceMap": "packages/check.js.map",
       "path": "packages/check.js"
     },
     {
-      "sourceMap": "packages/retry.js.map",
       "path": "packages/retry.js"
     },
     {
-      "sourceMap": "packages/ddp-common.js.map",
       "path": "packages/ddp-common.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/ddp-client/1.2.7/npm/node_modules",
-      "sourceMap": "packages/ddp-client.js.map",
+      "node_modules": "npm/node_modules/meteor/ddp-client/node_modules",
       "path": "packages/ddp-client.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/logging/1.0.12/npm/node_modules",
-      "sourceMap": "packages/logging.js.map",
+      "node_modules": "npm/node_modules/meteor/logging/node_modules",
       "path": "packages/logging.js"
     },
     {
-      "sourceMap": "packages/routepolicy.js.map",
       "path": "packages/routepolicy.js"
     },
     {
       "path": "packages/deps.js"
     },
     {
-      "sourceMap": "packages/htmljs.js.map",
       "path": "packages/htmljs.js"
     },
     {
-      "sourceMap": "packages/html-tools.js.map",
       "path": "packages/html-tools.js"
     },
     {
-      "sourceMap": "packages/blaze-tools.js.map",
       "path": "packages/blaze-tools.js"
     },
     {
-      "sourceMap": "packages/spacebars-compiler.js.map",
       "path": "packages/spacebars-compiler.js"
+    },
+    {
+      "path": "packages/observe-sequence.js"
     },
     {
       "path": "packages/jquery.js"
     },
     {
-      "sourceMap": "packages/observe-sequence.js.map",
-      "path": "packages/observe-sequence.js"
-    },
-    {
-      "sourceMap": "packages/reactive-var.js.map",
       "path": "packages/reactive-var.js"
     },
     {
-      "sourceMap": "packages/blaze.js.map",
       "path": "packages/blaze.js"
     },
     {
-      "sourceMap": "packages/spacebars.js.map",
       "path": "packages/spacebars.js"
     },
     {
       "path": "packages/ui.js"
     },
     {
-      "sourceMap": "packages/boilerplate-generator.js.map",
       "path": "packages/boilerplate-generator.js",
       "assets": {
         "boilerplate_web.browser.html": "assets/packages/boilerplate-generator/boilerplate_web.browser.html",
@@ -180,7 +147,7 @@
       "path": "packages/webapp-hashing.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/webapp/1.2.8/npm/node_modules",
+      "node_modules": "npm/node_modules/meteor/webapp/node_modules",
       "sourceMap": "packages/webapp.js.map",
       "path": "packages/webapp.js"
     },
@@ -188,11 +155,10 @@
       "path": "packages/autopublish.js"
     },
     {
-      "sourceMap": "packages/callback-hook.js.map",
       "path": "packages/callback-hook.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/ddp-server/1.2.6/npm/node_modules",
+      "node_modules": "npm/node_modules/meteor/ddp-server/node_modules",
       "sourceMap": "packages/ddp-server.js.map",
       "path": "packages/ddp-server.js"
     },
@@ -204,14 +170,13 @@
       "path": "packages/allow-deny.js"
     },
     {
-      "sourceMap": "packages/binary-heap.js.map",
       "path": "packages/binary-heap.js"
     },
     {
       "path": "packages/insecure.js"
     },
     {
-      "node_modules": "/C/Users/olegi.TETHYSTECH/AppData/Local/.meteor/packages/mongo/1.1.7/npm/node_modules",
+      "node_modules": "npm/node_modules/meteor/mongo/node_modules",
       "sourceMap": "packages/mongo.js.map",
       "path": "packages/mongo.js"
     },
@@ -225,6 +190,13 @@
       "path": "packages/standard-minifier-js.js"
     },
     {
+      "sourceMap": "packages/shell-server.js.map",
+      "path": "packages/shell-server.js"
+    },
+    {
+      "path": "packages/twbs_bootstrap.js"
+    },
+    {
       "path": "packages/livedata.js"
     },
     {
@@ -234,10 +206,15 @@
       "path": "packages/launch-screen.js"
     },
     {
+      "path": "packages/templating-compiler.js"
+    },
+    {
+      "path": "packages/templating-runtime.js"
+    },
+    {
       "path": "packages/templating.js"
     },
     {
-      "sourceMap": "packages/autoupdate.js.map",
       "path": "packages/autoupdate.js"
     },
     {
@@ -247,6 +224,7 @@
       "path": "packages/global-imports.js"
     },
     {
+      "sourceMap": "app/app.js.map",
       "path": "app/app.js"
     }
   ]

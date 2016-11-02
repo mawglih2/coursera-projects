@@ -20,16 +20,16 @@ var ECMAScript;
                                                                      //
 ECMAScript = {                                                       // 1
   compileForShell: function () {                                     // 2
-    function compileForShell(command) {                              //
+    function compileForShell(command) {                              // 1
       var babelOptions = Babel.getDefaultOptions();                  // 3
       babelOptions.sourceMap = false;                                // 4
       babelOptions.ast = false;                                      // 5
       return Babel.compile(command, babelOptions).code;              // 6
-    }                                                                //
+    }                                                                // 7
                                                                      //
-    return compileForShell;                                          //
-  }()                                                                //
-};                                                                   //
+    return compileForShell;                                          // 1
+  }()                                                                // 1
+};                                                                   // 1
 ///////////////////////////////////////////////////////////////////////
 
 }).call(this);
